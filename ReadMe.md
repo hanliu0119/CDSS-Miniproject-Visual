@@ -7,7 +7,9 @@ Follow these steps to set up and run the project:
 2. Install the necessary dependencies:
    ```bash
    npm install
-3. run it with `npm start`
+3. run it with
+    ```bash
+   npm start
 
 ## Backend Setup
 1. Navigate to the `backend/` folder.
