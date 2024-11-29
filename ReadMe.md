@@ -1,3 +1,17 @@
-1. Navigate to fronend/ folder, 'npm install' and run it with 'npm start'
-   
-2. Navigate to backend/ folder, 'npm install' and run it with 'node server.js'
+# Project Setup Instructions
+
+Follow these steps to set up and run the project:
+
+## Frontend Setup
+1. Navigate to the `frontend/` folder.
+2. Install the necessary dependencies:
+   ```bash
+   npm install
+3. run it with `npm start`
+
+## Backend Setup
+1. Navigate to the `backend/` folder.
+2. Install the necessary dependencies:
+   ```bash
+   npm install
+3. run it with `node server.js`
