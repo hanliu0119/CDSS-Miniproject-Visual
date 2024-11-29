@@ -14,4 +14,6 @@ Follow these steps to set up and run the project:
 2. Install the necessary dependencies:
    ```bash
    npm install
-3. run it with `node server.js`
+3. run it with
+   ```bash
+   node server.js
