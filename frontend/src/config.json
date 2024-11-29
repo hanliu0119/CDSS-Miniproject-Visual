@@ -1,0 +1,270 @@
+{
+    "max_probability_of_early_resignation": 0.1,
+    "optimization_objective": "(x -> x[1] + 20*x[3])",
+    "demo":{
+        "effective_treatments":[
+            "TMS", "ECT"
+        ]
+    },
+    "data_modalities": [
+        {
+            "name": "BLOOD",
+            "long_name": "Blood Testing",
+            "selected": true,
+            "provider_cost": 180.0,
+            "time": 7.0,
+            "payer_cost": 180.0
+        },
+        {
+            "name": "SCALES",
+            "long_name": "Psychometric Scales",
+            "selected": true,
+            "provider_cost": 30.0,
+            "time": 1.0,
+            "payer_cost": 30.0
+        },
+        {
+            "name": "TASKS",
+            "long_name": "Behavioral Task Testing",
+            "selected": true,
+            "provider_cost": 50.0,
+            "time": 2.0,
+            "payer_cost": 50.0
+        },
+        {
+            "name": "FMRI",
+            "long_name": "fMRI",
+            "selected": true,
+            "provider_cost": 650.0,
+            "time": 10.0,
+            "payer_cost": 650.0
+        },
+        {
+            "name": "EEG",
+            "long_name": "EEG",
+            "selected": true,
+            "provider_cost": 250.0,
+            "time": 10.0,
+            "payer_cost": 250.0
+        }
+    ],
+    "treatments": [
+        {
+            "name": "SSRI",
+            "long_name": "SSRI",
+            "selected": true,
+            "provider_cost": 10.0,
+            "time": 50.0,
+            "payer_cost": 10.0,
+            "efficacy": 0.25
+        },
+        {
+            "name": "SNRI",
+            "long_name": "SNRI",
+            "selected": true,
+            "provider_cost": 10.0,
+            "time": 55.0,
+            "payer_cost": 10.0,
+            "efficacy": 0.26
+        },
+        {
+            "name": "CBT_BA",
+            "long_name": "CBT (Behavioral Activation)",
+            "selected": true,
+            "provider_cost": 800.0,
+            "time": 70.0,
+            "payer_cost": 800.0,
+            "efficacy": 0.24
+        },
+        {
+            "name": "CBT_CR",
+            "long_name": "CBT (Cognitive Restructuring)",
+            "selected": true,
+            "provider_cost": 800.0,
+            "time": 70.0,
+            "payer_cost": 800.0,
+            "efficacy": 0.24
+        },
+        {
+            "name": "TMS",
+            "long_name": "Transcranial Magnetic Stimulation",
+            "selected": true,
+            "provider_cost": 13000.0,
+            "time": 45.0,
+            "payer_cost": 15000.0,
+            "efficacy": 0.28
+        },
+        {
+            "name": "KETAMINE",
+            "long_name": "Ketamine",
+            "selected": true,
+            "provider_cost": 3500.0,
+            "time": 50.0,
+            "payer_cost": 4000.0,
+            "efficacy": 0.3
+        },
+        {
+            "name": "ECT",
+            "long_name": "Electroconvulsive Therapy",
+            "selected": true,
+            "provider_cost": 10500.0,
+            "time": 50.0,
+            "payer_cost": 10000.0,
+            "efficacy": 0.1
+        }
+    ],
+    "predictors": [
+        {
+            "name": "P1",
+            "modalities": [
+                "BLOOD"
+            ],
+            "sensitivity": 0.82,
+            "specificity": 0.7,
+            "description": "Antidepressants or CBT (either variant) are predicted to be:",
+            "response_targets": [
+                "SSRI",
+                "SNRI",
+                "CBT_BA",
+                "CBT_CR"
+            ]
+        },
+        {
+            "name": "P2",
+            "modalities": [
+                "SCALES",
+                "TASKS"
+            ],
+            "sensitivity": 0.52,
+            "specificity": 0.82,
+            "description": "CBT (Behavioral Activation) is predicted to be:",
+            "response_targets": [
+                "CBT_BA"
+            ]
+        },
+        {
+            "name": "P3",
+            "modalities": [
+                "SCALES",
+                "TASKS"
+            ],
+            "sensitivity": 0.52,
+            "specificity": 0.82,
+            "description": "CBT (Cognitive Restructuring) is predicted to be:",
+            "response_targets": [
+                "CBT_CR"
+            ]
+        },
+        {
+            "name": "P4",
+            "modalities": [
+                "FMRI"
+            ],
+            "sensitivity": 0.72,
+            "specificity": 0.82,
+            "description": "TMS is predicted to be:",
+            "response_targets": [
+                "TMS"
+            ]
+        },
+        {
+            "name": "P5",
+            "modalities": [
+                "EEG"
+            ],
+            "sensitivity": 0.55,
+            "specificity": 0.55,
+            "description": "TMS is predicted to be:",
+            "response_targets": [
+                "TMS"
+            ]
+        }
+    ],
+    "initial_state": {
+      "health": false,
+      "resigned": false,
+      "treatments": {
+        "SSRI" : true,
+        "SNRI" : true,
+        "CBT_BA": false,
+        "CBT_CR": false,
+        "TMS": false,
+        "KETAMINE": false,
+        "ECT": false
+      },
+      "data": {
+        "BLOOD": false,
+        "SCALES": false,
+        "TASKS": false,
+        "EEG": false,
+        "FMRI": false
+      },
+      "predictors": {
+        "P1": null,
+        "P2": null,
+        "P3": null,
+        "P4": null,
+        "P5": null
+      }
+    },
+    "deployment": {
+        "backend":"http://10.5.0.3",
+        "fepic": "http://10.5.0.2",
+        "dm": "http://10.5.0.42:8004",
+        "stepper": "http://10.5.0.5"
+    },
+    "models":{
+        "fMRI2rTMS":{
+            "preprocess":[
+                {"from":"FMRI/gordon", "to": "FMRI/gordon"}
+            ],
+            "assemble":["FMRI/gordon"]
+        },
+        "UCSD":{
+            "preprocess":[
+                {"from": "EEG/all", "to": "EEG/all"}
+            ],
+            "assemble":["EEG/all"]
+        },
+        "iCBT":{
+            "preprocess":[
+                {"from":"SCALES/GAD","to":"SCALES/GAD"},
+                {"from":"SCALES/SHAPS","to":"SCALES/SHAPS"},
+                {"from":"SCALES/PHQ","to":"SCALES/PHQ"},
+                {"from":"SCALES/PVSS","to":"SCALES/PVSS"},
+                {"from":"SCALES/WSAS","to":"SCALES/WSAS"},
+                {"from":"SCALES/DAS","to":"SCALES/DAS"},
+                {"from":"TASKS/AGE","to":"TASKS/AGE"},
+                {"from":"TASKS/SEX","to":"TASKS/SEX"},
+                {"from":"TASKS/RAnt","to":"TASKS/RAnt"},
+                {"from":"TASKS/RExp","to":"TASKS/RExp"},
+                {"from":"TASKS/EAnt","to":"TASKS/EAnt"},
+                {"from":"TASKS/EExp","to":"TASKS/EExp"},
+                {"from":"TASKS/meanDT","to":"TASKS/meanDT"}
+            ],
+            "assemble":[
+                "SCALES/GAD",
+                "SCALES/SHAPS",
+                "SCALES/PHQ",
+                "SCALES/PVSS",
+                "SCALES/WSAS",
+                "SCALES/DAS",
+                "TASKS/AGE",
+                "TASKS/SEX",
+                "TASKS/RAnt",
+                "TASKS/RExp",
+                "TASKS/EAnt",
+                "TASKS/EExp",
+                "TASKS/meanDT"
+            ]
+        },
+        "MSSM_TRD":{
+            "preprocess":[
+                {"from": "BLOOD/proteomics", "to":"BLOOD/proteomics"}
+            ],
+            "assemble":[
+                "BLOOD/proteomics"
+            ]
+        }
+    }
+}

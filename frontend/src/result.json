@@ -1,0 +1,27 @@
+[
+  {
+    "modality": "Psychometric Scales",
+    "predictor": "P3",
+    "treatment": "Transcranial Magnetic Stimulation"
+  },
+  {
+    "modality": "Behavioral Task Testing",
+    "predictor": "P3",
+    "treatment": "SNRI"
+  },
+  {
+    "modality": "Psychometric Scales",
+    "predictor": "P4",
+    "treatment": "Ketamine"
+  },
+  {
+    "modality": "Psychometric Scales",
+    "predictor": "P3",
+    "treatment": "Electroconvulsive Therapy"
+  },
+  {
+    "modality": "fakeM",
+    "predictor": "fake_p",
+    "treatment": "fake_t"
+  }
+]
