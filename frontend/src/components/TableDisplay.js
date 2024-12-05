@@ -10,7 +10,14 @@ function TableDisplay() {
         const response = await fetch('http://localhost:5001/result.json'); // Replace with your backend endpoint
         if (response.ok) {
           const jsonData = await response.json();
-          setData(jsonData);
+          // Ensure timestamp is properly formatted during fetch
+          const updatedData = jsonData.map((row) => ({
+            ...row,
+            recordAddedTime: row.recordAddedTime
+              ? new Date(row.recordAddedTime).toLocaleString('en-US', { timeZone: 'America/Los_Angeles' })
+              : 'Invalid Timestamp', // Fallback for invalid timestamps
+          }));
+          setData(updatedData);
         } else {
           console.error('Failed to fetch result.json');
         }
@@ -48,6 +55,7 @@ function TableDisplay() {
               <TableCell><strong>Data Modality</strong></TableCell>
               <TableCell><strong>Predictor</strong></TableCell>
               <TableCell><strong>Treatment</strong></TableCell>
+              <TableCell><strong>Record Added (PST)</strong></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -56,6 +64,7 @@ function TableDisplay() {
                 <TableCell>{row.modality}</TableCell>
                 <TableCell>{row.predictor}</TableCell>
                 <TableCell>{row.treatment}</TableCell>
+                <TableCell>{row.recordAddedTime}</TableCell>
               </TableRow>
             ))}
           </TableBody>

@@ -1,140 +1,171 @@
-import React from 'react';
-import { Box, Button, Typography } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Box, Typography, MenuItem, Select, FormControl } from '@mui/material';
+// Import the JSON file
+import nodeRelationships from '../node_relationships.json';
 
-function NodeConnection({ selectedDetails }) {
-  const handleRun = async () => {
-    const newRecord = {
-        modality: selectedDetails.modality?.long_name || "None",
-        predictor: selectedDetails.predictor?.name || "None",
-        treatment: selectedDetails.treatment?.long_name || "None",
+function NodeConnection() {
+  const [predictors, setPredictors] = useState([]);
+  const [selectedPredictor, setSelectedPredictor] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Simulating an async fetch from the JSON file
+        const data = await Promise.resolve(nodeRelationships);
+        setPredictors(data);
+        setSelectedPredictor(data[0]); // Default to the first predictor
+      } catch (error) {
+        console.error('Error fetching node relationships:', error);
+      }
     };
 
-    try {
-        const response = await fetch('http://localhost:5001/save-result', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newRecord),
-        });
+    fetchData();
+  }, []);
 
-        if (response.ok) {
-            console.log('Record saved successfully.');
-        } else {
-            console.error('Failed to save record.');
-        }
-    } catch (error) {
-        console.error('Error connecting to the server:', error);
-    }
+  const handlePredictorChange = (event) => {
+    const selected = predictors.find((p) => p.predictor === event.target.value);
+    setSelectedPredictor(selected);
   };
-
 
   return (
     <Box
       sx={{
-        height: '50%',
-        borderBottom: '1px solid #ccc',
-        padding: '10px',
+        height: '100vh',
+        overflowY: 'auto',
+        padding: '20px',
+        boxSizing: 'border-box',
         position: 'relative',
       }}
     >
-      <Typography variant="h6" sx={{ marginBottom: '10px' }}>
-        Nodes Connection Graph
-      </Typography>
+      {/* Heading and Dropdown in Same Row */}
       <Box
         sx={{
           display: 'flex',
+          justifyContent: 'space-between',
           alignItems: 'center',
-          justifyContent: 'center',
-          height: 'calc(100% - 50px)', // Account for button height
+          marginBottom: '20px',
         }}
       >
-        {/* Node 1: Data Modality */}
-        <Box
-          sx={{
-            width: '120px',
-            height: '50px',
-            backgroundColor: '#1976d2',
-            color: 'white',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderRadius: '5px',
-            marginRight: '20px',
-            textAlign: 'center',
-          }}
-        >
-          {selectedDetails.modality?.long_name || "Data Modality"}
-        </Box>
-
-        {/* Connector 1 */}
-        <Typography
-          sx={{
-            marginRight: '20px',
-            fontSize: '24px',
-          }}
-        >
-          →
+        <Typography variant="h6" sx={{ flex: 1, textAlign: 'left' }}>
+          Nodes Connection Graph
         </Typography>
-
-        {/* Node 2: Predictor */}
-        <Box
-          sx={{
-            width: '120px',
-            height: '50px',
-            backgroundColor: '#ff9800',
-            color: 'white',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderRadius: '5px',
-            marginRight: '20px',
-            textAlign: 'center',
-          }}
-        >
-          {selectedDetails.predictor?.name || "Predictor"}
-        </Box>
-
-        {/* Connector 2 */}
-        <Typography
-          sx={{
-            marginRight: '20px',
-            fontSize: '24px',
-          }}
-        >
-          →
-        </Typography>
-
-        {/* Node 3: Treatment */}
-        <Box
-          sx={{
-            width: '120px',
-            height: '50px',
-            backgroundColor: '#4caf50',
-            color: 'white',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderRadius: '5px',
-            textAlign: 'center',
-          }}
-        >
-          {selectedDetails.treatment?.long_name || "Treatment"}
-        </Box>
+        <FormControl sx={{ minWidth: '200px' }}>
+          <Select
+            value={selectedPredictor?.predictor || ''}
+            onChange={handlePredictorChange}
+            displayEmpty
+            sx={{
+              height: '35px',
+              backgroundColor: '#fff',
+              borderRadius: '4px',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+            }}
+          >
+            {predictors.map((predictor) => (
+              <MenuItem key={predictor.predictor} value={predictor.predictor}>
+                {predictor.predictor}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </Box>
 
-      <Button
-        variant="contained"
-        color="primary"
-        sx={{
-          position: 'absolute',
-          bottom: '10px',
-          left: '50%',
-          transform: 'translateX(-50%)', // Center the button horizontally
-          width: '150px', // Adjust the width as needed
-        }}
-        onClick={handleRun}
-      >
-        Run
-      </Button>
+      {selectedPredictor && (
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          {/* Row 1: Modalities */}
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginBottom: '20px',
+            }}
+          >
+            {selectedPredictor.modalities.map((modality, index) => (
+              <Box
+                key={`modality-${index}`}
+                sx={{
+                  width: '140px',
+                  height: '50px',
+                  backgroundColor: '#1976d2',
+                  color: 'white',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRadius: '5px',
+                  margin: '0 10px',
+                  textAlign: 'center',
+                  fontSize: '14px',
+                }}
+              >
+                {modality}
+              </Box>
+            ))}
+          </Box>
+
+          {/* Arrow from Modalities to Predictor */}
+          <Typography sx={{ fontSize: '28px', marginBottom: '10px' }}>↓</Typography>
+
+          {/* Row 2: Predictor */}
+          <Box
+            sx={{
+              width: '140px',
+              height: '50px',
+              backgroundColor: '#ff9800',
+              color: 'white',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: '5px',
+              marginBottom: '20px',
+              textAlign: 'center',
+              fontSize: '14px',
+            }}
+          >
+            {selectedPredictor.predictor}
+          </Box>
+
+          {/* Arrow from Predictor to Treatments */}
+          <Typography sx={{ fontSize: '28px', marginBottom: '10px' }}>↓</Typography>
+
+          {/* Row 3: Treatments */}
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: '10px',
+            }}
+          >
+            {selectedPredictor.treatments.map((treatment, index) => (
+              <Box
+                key={`treatment-${index}`}
+                sx={{
+                  width: '140px',
+                  height: '50px',
+                  backgroundColor: '#4caf50',
+                  color: 'white',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRadius: '5px',
+                  textAlign: 'center',
+                  fontSize: '14px',
+                }}
+              >
+                {treatment}
+              </Box>
+            ))}
+          </Box>
+        </Box>
+      )}
     </Box>
   );
 }

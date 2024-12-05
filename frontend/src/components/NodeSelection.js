@@ -41,6 +41,32 @@ function NodeSelection({ config, handleSelect, selectedDetails }) {
     handleDialogClose();
   };
 
+  const handleRun = async () => {
+    const result = {
+      modality: selectedDetails.modality?.long_name || "None",
+      predictor: selectedDetails.predictor?.name || "None",
+      treatment: selectedDetails.treatment?.long_name || "None",
+      recordAddedTime: new Date().toLocaleString('en-US', { timeZone: 'UTC' }), // Add current time in UTC
+    };
+  
+    try {
+      const response = await fetch('http://localhost:5001/save-result', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(result),
+      });
+  
+      if (response.ok) {
+        console.log('Result saved successfully.');
+      } else {
+        console.error('Failed to save result.');
+      }
+    } catch (error) {
+      console.error('Error saving result:', error);
+    }
+  };
+  
+
   const renderDetails = (details) => {
     if (!details) return <Typography variant="body2">No selection</Typography>;
 
@@ -81,7 +107,7 @@ function NodeSelection({ config, handleSelect, selectedDetails }) {
     <Box
       sx={{
         width: '30%',
-        padding: '10px',
+        padding: '5px',
         borderRight: '1px solid #ccc',
         overflowY: 'auto',
         position: 'relative',
@@ -91,8 +117,9 @@ function NodeSelection({ config, handleSelect, selectedDetails }) {
       }}
     >
       <Box>
-        <Box sx={{ marginBottom: '10px' }}>
-          <Typography variant="h6" sx={{ marginBottom: '8px' }}>
+        {/* Data Modalities */}
+        <Box sx={{ marginBottom: '5px' }}>
+          <Typography variant="h6" sx={{ marginBottom: '5px' }}>
             Data Modalities
           </Typography>
           <FormControl fullWidth size="small">
@@ -112,7 +139,7 @@ function NodeSelection({ config, handleSelect, selectedDetails }) {
           <Box
             sx={{
               marginTop: '10px',
-              padding: '10px',
+              padding: '5px',
               border: '1px solid #ccc',
               textAlign: 'left',
               lineHeight: '1.2em',
@@ -124,8 +151,9 @@ function NodeSelection({ config, handleSelect, selectedDetails }) {
           </Box>
         </Box>
 
-        <Box sx={{ marginBottom: '10px' }}>
-          <Typography variant="h6" sx={{ marginBottom: '8px' }}>
+        {/* Predictors */}
+        <Box sx={{ marginBottom: '5px' }}>
+          <Typography variant="h6" sx={{ marginBottom: '5px' }}>
             Predictors
           </Typography>
           <FormControl fullWidth size="small">
@@ -145,7 +173,7 @@ function NodeSelection({ config, handleSelect, selectedDetails }) {
           <Box
             sx={{
               marginTop: '10px',
-              padding: '10px',
+              padding: '5px',
               border: '1px solid #ccc',
               textAlign: 'left',
               lineHeight: '1.2em',
@@ -157,8 +185,9 @@ function NodeSelection({ config, handleSelect, selectedDetails }) {
           </Box>
         </Box>
 
+        {/* Treatments */}
         <Box>
-          <Typography variant="h6" sx={{ marginBottom: '8px' }}>
+          <Typography variant="h6" sx={{ marginBottom: '5px' }}>
             Treatments
           </Typography>
           <FormControl fullWidth size="small">
@@ -178,7 +207,7 @@ function NodeSelection({ config, handleSelect, selectedDetails }) {
           <Box
             sx={{
               marginTop: '10px',
-              padding: '10px',
+              padding: '5px',
               border: '1px solid #ccc',
               textAlign: 'left',
               lineHeight: '1.2em',
@@ -191,25 +220,34 @@ function NodeSelection({ config, handleSelect, selectedDetails }) {
         </Box>
       </Box>
 
-      <Button
-        variant="contained"
-        color="primary"
-        sx={{
-          marginTop: '20px',
-          alignSelf: 'center',
-          width: '50%',
-        }}
-        onClick={handleCreateOpen}
-      >
-        Create New
-      </Button>
+      {/* Buttons Row */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleCreateOpen}
+          sx={{ width: '48%' }}
+        >
+          Create New
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleRun}
+          sx={{ width: '48%' }}
+        >
+          Run
+        </Button>
+      </Box>
 
+      {/* Create New Menu */}
       <Menu anchorEl={createAnchor} open={Boolean(createAnchor)} onClose={handleCreateClose}>
         <MenuItem onClick={() => handleCreateTypeSelect('modality')}>Modality</MenuItem>
         <MenuItem onClick={() => handleCreateTypeSelect('predictor')}>Predictor</MenuItem>
         <MenuItem onClick={() => handleCreateTypeSelect('treatment')}>Treatment</MenuItem>
       </Menu>
 
+      {/* Create New Dialog */}
       <Dialog open={dialogOpen} onClose={handleDialogClose}>
         <DialogTitle>Create New {createType}</DialogTitle>
         <DialogContent>{renderInputFields()}</DialogContent>

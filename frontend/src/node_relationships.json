@@ -1,0 +1,28 @@
+[
+    {
+      "predictor": "P1",
+      "modalities": ["Blood Testing"],
+      "treatments": ["SSRI", "SNRI", "CBT (Behavioral Activation)", "CBT (Cognitive Restructuring)"]
+    },
+    {
+      "predictor": "P2",
+      "modalities": ["Psychometric Scales", "Behavioral Task Testing"],
+      "treatments": ["CBT (Behavioral Activation)"]
+    },
+    {
+      "predictor": "P3",
+      "modalities": ["Psychometric Scales", "Behavioral Task Testing"],
+      "treatments": ["CBT (Cognitive Restructuring)"]
+    },
+    {
+      "predictor": "P4",
+      "modalities": ["fMRI"],
+      "treatments": ["TMS"]
+    },
+    {
+      "predictor": "P5",
+      "modalities": ["EEG"],
+      "treatments": ["TMS"]
+    }
+  ]
+  
